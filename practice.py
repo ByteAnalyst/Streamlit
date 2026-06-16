@@ -1,0 +1,18 @@
+import streamlit as st
+import pandas as pd
+import numpy as np
+
+
+count = 0
+if 'count' not in  st.session_state:
+    st.session_state.count = 0
+if st.button('Add 1'):
+    st.session_state.count += 1
+
+st.write(st.session_state.count)
+
+if "df" not in st.session_state:
+    st.session_state.df = pd.DataFrame(np.random.randn(20, 2), columns=["x", "y"])
+color = st.color_picker("Color", "#FF0000")
+st.divider()
+st.scatter_chart(st.session_state.df, x="x", y="y", color=color)
