@@ -7,7 +7,6 @@ st.title('World Cup Matches')
 
 # load the file 
 df = pd.read_csv('WorldCupMatches.csv')
-st.write(df)
 
 # Data cleaning
 df = df.fillna(0)
@@ -22,9 +21,29 @@ df['Attendance'] = df['Attendance'].astype(int)
 # A side bar
 st.sidebar.title('Select Year')
 years = df['Year'].unique()
-st.sidebar.selectbox('label', options=years)
+selected_year = st.sidebar.selectbox('label', options=years)
 
-total_matches = len(df)
-total_goals = sum(df['Home Team Goals']) + sum(['Away Team Goals'])
-total_tournaments = sum(df['Year'].unique())
-st.columns(4)
+
+filtered_df = df[df['Year'] == selected_year]
+st.write(filtered_df)
+
+
+col1, col2, col3 = st.columns(3)
+
+col1.metric('Total Matches', len(filtered_df))
+col2.metric('Total Home Team Goals', filtered_df['Home Team Goals'].sum())
+col3.metric('Total Away Team Goals', filtered_df['Away Team Goals'].sum())
+
+
+# Adding a chart for home team goals 
+st.subheader('Home Team Goals By Stage')
+st.bar_chart(data=filtered_df, x= 'Stage', y= 'Home Team Goals')
+
+
+# Adding a chart for away team goals
+st.subheader('Away Team Goals By Stage')
+st.bar_chart(data=filtered_df, x= 'Stage', y= 'Away Team Goals')
+
+# Adding a chart for Attendance
+st.subheader('Attendance By Stage')
+st.bar_chart(data=filtered_df, x= 'Stage', y= 'Attendance')
